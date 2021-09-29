@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public class HttpServer {
 
     public static int DEFAULT_PORT = 777;
+    public static int THREAD_COUNT = 32;
     private com.sun.net.httpserver.HttpServer serverInstance = null;
     private final RequestHandler[] handlers;
 
@@ -31,9 +32,8 @@ public class HttpServer {
     }
 
     public void init(int port) throws IOException {
-        ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
+        ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_COUNT);
         serverInstance = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress("0.0.0.0", port), 0);
-
         serverInstance.createContext("/", new HttpHandler() {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
